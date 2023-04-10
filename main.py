@@ -52,7 +52,7 @@ async def create(request: Request):
     body = await request.json()
     delivery = Delivery(budget=body['data']['budget'], notes=body['data']['budget']).save()
     event = Event(delivery_id=delivery.pk, type=body['type'], data=json.dumps(body['data'])).save()
-    state = consumers.CONSUMERS[body['type']] ({}, event)
+    state = consumers.CONSUMERS[body['type']]({}, event)
     redis.set(f"delivery:{delivery.pk}",json.dumps(state))
     return state
 
